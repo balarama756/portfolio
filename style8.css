@@ -31,6 +31,32 @@ section{
     min-height: 100vh;
     padding: 10rem 9% 2rem;
 }
+.about-right {
+    flex: 1;
+}
+
+.about-right h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.about-right p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.about-right ul {
+    list-style: none;
+    padding: 0;
+}
+
+.about-right ul li {
+    margin-bottom: 0.5rem;
+}
+
+.about-right ul li strong {
+    font-weight: 700;
+}
 .header{
     position: fixed;
     top:0;
