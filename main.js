@@ -56,7 +56,7 @@ const typed = new Typed('.multiple-text',{
 }); 
 
 document.getElementById('contact-form').addEventListener('submit', async function (e) {
-    e.preventDefault();
+    e.preventDefault(); // Prevent the default form submission
 
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
@@ -83,38 +83,6 @@ document.getElementById('contact-form').addEventListener('submit', async functio
         }
     } catch (error) {
         alert('There was an error sending your message.');
-        console.error(error);
-    }
-});
-
-document.getElementById('contact-form').addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const subject = document.getElementById('subject').value;
-    const message = document.getElementById('message').value;
-
-    const data = { name, email, subject, message };
-
-    try {
-        const response = await fetch('http://localhost:5000/api/contact', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            alert('Message sent successfully!');
-        } else {
-            alert('Error: ' + result.message);
-        }
-    } catch (error) {
-        alert('There was an error sending your message.');
-        console.error(error);
+        console.error(error); // Log the error for debugging
     }
 });
