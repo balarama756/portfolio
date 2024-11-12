@@ -13,11 +13,11 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 
 // Set the ngrok URL
-const ngrokUrl = 'https://eb93-139-5-248-121.ngrok-free.app';  
+//const ngrokUrl = 'https://eb93-139-5-248-121.ngrok-free.app';  
 
 // Enable CORS for specific origins
 app.use(cors({
-  origin: ['http://localhost:8080', 'https://balarama756.github.io', 'ngrokUrl' ], // Allow both localhost and GitHub Pages
+  origin: ['http://localhost:8080', 'https://balarama756.github.io' ], // Allow both localhost and GitHub Pages
   methods: 'GET, POST',            // Allow GET and POST methods
   allowedHeaders: 'Content-Type',  // Allow specific headers
 }));
