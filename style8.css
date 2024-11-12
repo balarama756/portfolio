@@ -485,42 +485,21 @@ span{
     }
 }
 
-/* Success message pop-up */
+.success-message, .error-message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: white;
+    z-index: 1000;
+    display: none;
+}
 .success-message {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 15px 30px;
-    border-radius: 5px;
-    font-size: 16px;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease;
+    background-color: #28a745;
 }
-
-.success-message.show {
-    display: block;
-    opacity: 1;
-}
-
-/* Error message pop-up */
 .error-message {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 15px 30px;
-    border-radius: 5px;
-    font-size: 16px;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease;
+    background-color: #dc3545;
 }
-
-.error-message.show {
-    display: block;
-    opacity: 1;
-}
-
-    
