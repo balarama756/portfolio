@@ -1,18 +1,78 @@
-// Select DOM elements
+// Import Redux (use this in case you are running a Node.js environment or CDN in the browser)
+const { createStore } = Redux;
+
+// Step 1: Define Action Types
+const SET_SUCCESS_MESSAGE = 'SET_SUCCESS_MESSAGE';
+const SET_ERROR_MESSAGE = 'SET_ERROR_MESSAGE';
+
+// Step 2: Define Action Creators
+function setSuccessMessage(message) {
+    return {
+        type: SET_SUCCESS_MESSAGE,
+        payload: message
+    };
+}
+
+function setErrorMessage(message) {
+    return {
+        type: SET_ERROR_MESSAGE,
+        payload: message
+    };
+}
+
+// Step 3: Define Initial State
+const initialState = {
+    successMessage: '',
+    errorMessage: ''
+};
+
+// Step 4: Define Reducer
+function messageReducer(state = initialState, action) {
+    switch (action.type) {
+        case SET_SUCCESS_MESSAGE:
+            return { ...state, successMessage: action.payload };
+        case SET_ERROR_MESSAGE:
+            return { ...state, errorMessage: action.payload };
+        default:
+            return state;
+    }
+}
+
+// Step 5: Create Redux Store
+const store = createStore(messageReducer);
+
+// Step 6: Subscribe to the Redux Store
+store.subscribe(() => {
+    const state = store.getState();
+    const successMessageDiv = document.querySelector('.success-message');
+    const errorMessageDiv = document.querySelector('.error-message');
+
+    if (state.successMessage) {
+        successMessageDiv.textContent = state.successMessage;
+        successMessageDiv.style.display = 'block';
+        successMessageDiv.classList.add('show');
+        setTimeout(() => {
+            successMessageDiv.classList.remove('show');
+            successMessageDiv.style.display = 'none';
+        }, 3000);
+    }
+
+    if (state.errorMessage) {
+        errorMessageDiv.textContent = state.errorMessage;
+        errorMessageDiv.style.display = 'block';
+        errorMessageDiv.classList.add('show');
+        setTimeout(() => {
+            errorMessageDiv.classList.remove('show');
+            errorMessageDiv.style.display = 'none';
+        }, 3000);
+    }
+});
+
+// DOM Elements
 let menuIcon = document.querySelector('#menu-icon');
 let navbar = document.querySelector('.navbar');
 let sections = document.querySelectorAll('section');
 let navLinks = document.querySelectorAll('header nav a');
-
-// Create success pop-up div
-let successMessage = document.createElement('div');
-successMessage.classList.add('success-message');
-document.body.appendChild(successMessage); // Append to body
-
-// Create error pop-up div
-let errorMessage = document.createElement('div');
-errorMessage.classList.add('error-message');
-document.body.appendChild(errorMessage); // Append to body
 
 // Menu Toggle
 menuIcon.onclick = () => {
@@ -65,7 +125,7 @@ const typed = new Typed('.multiple-text', {
     loop: true,
 });
 
-// Contact Form Submission with Success and Error Pop-ups
+// Contact Form Submission with Redux for Success and Error Pop-ups
 document.getElementById('contact-form').addEventListener('submit', async function (e) {
     e.preventDefault(); // Prevent default form submission
 
@@ -88,33 +148,15 @@ document.getElementById('contact-form').addEventListener('submit', async functio
         const result = await response.json();
 
         if (response.ok) {
-            // Show success message
-            successMessage.textContent = 'Message sent successfully!';
-            successMessage.style.display = 'block';
-            successMessage.classList.add('show'); // Add animation class for fade-in
-            setTimeout(() => {
-                successMessage.classList.remove('show'); // Remove fade-in animation
-                successMessage.style.display = 'none'; // Hide after animation
-            }, 3000);
+            // Dispatch success message to Redux
+            store.dispatch(setSuccessMessage('Message sent successfully!'));
         } else {
-            // Show error message
-            errorMessage.textContent = 'There was an error sending your message.';
-            errorMessage.style.display = 'block';
-            errorMessage.classList.add('show'); // Add animation class for fade-in
-            setTimeout(() => {
-                errorMessage.classList.remove('show'); // Remove fade-in animation
-                errorMessage.style.display = 'none'; // Hide after animation
-            }, 3000);
+            // Dispatch error message to Redux
+            store.dispatch(setErrorMessage('There was an error sending your message.'));
         }
     } catch (error) {
-        // Show error pop-up in case of a fetch error
-        errorMessage.textContent = 'There was an error sending your message.';
-        errorMessage.style.display = 'block';
-        errorMessage.classList.add('show');
-        setTimeout(() => {
-            errorMessage.classList.remove('show');
-            errorMessage.style.display = 'none';
-        }, 3000);
+        // Dispatch error message to Redux
+        store.dispatch(setErrorMessage('There was an error sending your message.'));
         console.error('Error:', error); // Log the error
     }
 });
