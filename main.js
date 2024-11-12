@@ -3,13 +3,16 @@ let menuIcon = document.querySelector('#menu-icon');
 let navbar = document.querySelector('.navbar');
 let sections = document.querySelectorAll('section');
 let navLinks = document.querySelectorAll('header nav a');
-let successMessage = document.createElement('div'); // Create a success pop-up div
-successMessage.classList.add('success-message'); // Add a class for styling the pop-up
-document.body.appendChild(successMessage); // Append the message to the body
 
-let errorMessage = document.createElement('div'); // Create an error pop-up div
-errorMessage.classList.add('error-message'); // Add a class for styling the pop-up
-document.body.appendChild(errorMessage); // Append the error message to the body
+// Create success pop-up div
+let successMessage = document.createElement('div');
+successMessage.classList.add('success-message');
+document.body.appendChild(successMessage); // Append to body
+
+// Create error pop-up div
+let errorMessage = document.createElement('div');
+errorMessage.classList.add('error-message');
+document.body.appendChild(errorMessage); // Append to body
 
 // Menu Toggle
 menuIcon.onclick = () => {
@@ -64,7 +67,7 @@ const typed = new Typed('.multiple-text', {
 
 // Contact Form Submission with Success and Error Pop-ups
 document.getElementById('contact-form').addEventListener('submit', async function (e) {
-    e.preventDefault(); // Prevent the default form submission
+    e.preventDefault(); // Prevent default form submission
 
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
@@ -85,33 +88,33 @@ document.getElementById('contact-form').addEventListener('submit', async functio
         const result = await response.json();
 
         if (response.ok) {
-            // Display success pop-up
+            // Show success message
             successMessage.textContent = 'Message sent successfully!';
             successMessage.style.display = 'block';
-            successMessage.style.backgroundColor = '#28a745'; // Green for success
-            successMessage.style.color = '#fff';
+            successMessage.classList.add('show'); // Add animation class for fade-in
             setTimeout(() => {
-                successMessage.style.display = 'none'; // Hide the pop-up after 3 seconds
+                successMessage.classList.remove('show'); // Remove fade-in animation
+                successMessage.style.display = 'none'; // Hide after animation
             }, 3000);
         } else {
-            // Display error pop-up in red
+            // Show error message
             errorMessage.textContent = 'There was an error sending your message.';
             errorMessage.style.display = 'block';
-            errorMessage.style.backgroundColor = '#dc3545'; // Red for error
-            errorMessage.style.color = '#fff';
+            errorMessage.classList.add('show'); // Add animation class for fade-in
             setTimeout(() => {
-                errorMessage.style.display = 'none'; // Hide the error pop-up after 3 seconds
+                errorMessage.classList.remove('show'); // Remove fade-in animation
+                errorMessage.style.display = 'none'; // Hide after animation
             }, 3000);
         }
     } catch (error) {
-        // Display error pop-up in red
+        // Show error pop-up in case of a fetch error
         errorMessage.textContent = 'There was an error sending your message.';
         errorMessage.style.display = 'block';
-        errorMessage.style.backgroundColor = '#dc3545'; // Red for error
-        errorMessage.style.color = '#fff';
+        errorMessage.classList.add('show');
         setTimeout(() => {
-            errorMessage.style.display = 'none'; // Hide the error pop-up after 3 seconds
+            errorMessage.classList.remove('show');
+            errorMessage.style.display = 'none';
         }, 3000);
-        console.error(error); // Log the error for debugging
+        console.error('Error:', error); // Log the error
     }
 });

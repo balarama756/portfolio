@@ -485,21 +485,31 @@ span{
     }
 }
 
+/* Styling for the success and error messages */
 .success-message, .error-message {
     position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    padding: 10px;
+    padding: 15px;
     border-radius: 5px;
     font-size: 16px;
     color: white;
     z-index: 1000;
-    display: none;
+    display: none; /* Initially hidden */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
+
 .success-message {
-    background-color: #28a745;
+    background-color: #28a745; /* Green for success */
 }
+
 .error-message {
-    background-color: #dc3545;
+    background-color: #dc3545; /* Red for error */
+}
+
+/* Animation to show the pop-up */
+.success-message.show, .error-message.show {
+    opacity: 1;
 }
