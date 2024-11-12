@@ -484,7 +484,6 @@ span{
         width: 100%;
     }
 }
-
 /* Styling for the success and error messages */
 .success-message, .error-message {
     position: fixed;
