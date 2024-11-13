@@ -1,16 +1,26 @@
+// Select DOM elements
 let menuIcon = document.querySelector('#menu-icon');
 let navbar = document.querySelector('.navbar');
+let sections = document.querySelectorAll('section');
+let navLinks = document.querySelectorAll('header nav a');
 
+// Create success pop-up div
+let successMessage = document.createElement('div');
+successMessage.classList.add('success-message');
+document.body.appendChild(successMessage); // Append to body
+
+// Create error pop-up div
+let errorMessage = document.createElement('div');
+errorMessage.classList.add('error-message');
+document.body.appendChild(errorMessage); // Append to body
+
+// Menu Toggle
 menuIcon.onclick = () => {
     menuIcon.classList.toggle('fa-xmark');
     navbar.classList.toggle('active');
 };
 
-/======================================================= Scroll section active link ================================================================/
-
-let sections = document.querySelectorAll('section');
-let navLinks = document.querySelectorAll('header nav a');
-
+// Scroll section active link
 window.onscroll = () => {
     sections.forEach(sec => {
         let top = window.scrollY;
@@ -27,39 +37,38 @@ window.onscroll = () => {
         }
     });
 
-    /========================================================== Sticky nav bar ================================================================/
+    // Sticky nav bar
     let header = document.querySelector('header');
     header.classList.toggle('sticky', window.scrollY > 100);
 
-    /==================================================== Remove toggle icon and nav bar ================================================================/
+    // Remove toggle icon and navbar
     menuIcon.classList.remove('fa-xmark');
     navbar.classList.remove('active');
 };
 
-/==================================================== Scroll reveal js ================================================================/
+// Scroll reveal JS
 ScrollReveal({
     distance: '80px',
     duration: 2000,
     delay: 200,
 });
-
 ScrollReveal().reveal('.home-content, heading', { origin: 'top' });
 ScrollReveal().reveal('.home-img, .services-container, .portfolio-box, .contact form', { origin: 'bottom' });
 ScrollReveal().reveal('.home-contact h1, .about-img', { origin: 'left' });
 ScrollReveal().reveal('.home-contact p, .about-content', { origin: 'right' });
 
-/===================================== =============== typed js ================================================================/
+// Typed JS
 const typed = new Typed('.multiple-text', {
-    strings: ['Full Stack Developer', 'web designer', 'memer', 'video editor', 'Graphic designer'],
+    strings: ['Full Stack Developer', 'Web Designer', 'Memer', 'Video Editor', 'Graphic Designer'],
     typeSpeed: 70,
     backSpeed: 70,
     backDelay: 1000,
     loop: true,
 });
 
-/==================================================== Contact Form Submission ================================================================/
+// Contact Form Submission with Success and Error Pop-ups
 document.getElementById('contact-form').addEventListener('submit', async function (e) {
-    e.preventDefault(); // Prevent the default form submission
+    e.preventDefault(); // Prevent default form submission
 
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
@@ -80,12 +89,33 @@ document.getElementById('contact-form').addEventListener('submit', async functio
         const result = await response.json();
 
         if (response.ok) {
-            alert('Message sent successfully!');
+            // Show success message
+            successMessage.textContent = 'Message sent successfully!';
+            successMessage.style.display = 'block';
+            successMessage.classList.add('show'); // Add animation class for fade-in
+            setTimeout(() => {
+                successMessage.classList.remove('show'); // Remove fade-in animation
+                successMessage.style.display = 'none'; // Hide after animation
+            }, 3000);
         } else {
-            alert('Error: ' + result.message);
+            // Show error message
+            errorMessage.textContent = 'There was an error sending your message.';
+            errorMessage.style.display = 'block';
+            errorMessage.classList.add('show'); // Add animation class for fade-in
+            setTimeout(() => {
+                errorMessage.classList.remove('show'); // Remove fade-in animation
+                errorMessage.style.display = 'none'; // Hide after animation
+            }, 3000);
         }
     } catch (error) {
-        alert('There was an error sending your message.');
-        console.error(error); // Log the error for debugging
+        // Show error pop-up in case of a fetch error
+        errorMessage.textContent = 'There was an error sending your message.';
+        errorMessage.style.display = 'block';
+        errorMessage.classList.add('show');
+        setTimeout(() => {
+            errorMessage.classList.remove('show');
+            errorMessage.style.display = 'none';
+        }, 3000);
+        console.error('Error:', error); // Log the error
     }
 });
