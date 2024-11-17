@@ -17,10 +17,11 @@ const ngrokUrl = 'https://fd2a-139-5-248-27.ngrok-free.app';  // Replace this wi
 
 // Enable CORS for specific origins
 app.use(cors({
-  origin: ['http://localhost:8080', 'https://balarama756.github.io', ngrokUrl], // Add the actual ngrok URL variable
-  methods: 'GET, POST',
-  allowedHeaders: 'Content-Type',
+  origin: ['http://localhost:8080', 'https://balarama756.github.io', ngrokUrl], // Add the GitHub Pages URL
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
 }));
+
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)
