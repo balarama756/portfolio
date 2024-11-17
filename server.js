@@ -4,24 +4,30 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 
+// Load environment variables
 dotenv.config();
 
+// Initialize Express app
 const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
 
-// Explicit CORS Handling
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://balarama756.github.io'); // Replace with your actual domain
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') {
-    return res.status(204).send(); // No content for preflight requests
-  }
-  next();
-});
+// Set the ngrok URL (use dynamic ngrok URL if running Ngrok)
+const ngrokUrl = 'https://fd2a-139-5-248-27.ngrok-free.app'; // Replace with your actual ngrok URL
+
+// Enable CORS for specific origins and handle preflight requests
+app.use(cors({
+  origin: ['http://localhost:8080', 'https://balarama756.github.io', ngrokUrl], // Add your actual domains and ngrok URL here
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+}));
+
+// Preflight request handling globally (OPTIONS)
+app.options('*', cors({
+  origin: ['http://localhost:8080', 'https://balarama756.github.io', ngrokUrl],
+}));
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -39,10 +45,11 @@ const Message = mongoose.model('Message', new mongoose.Schema({
 
 // Route to handle message submissions (POST)
 app.post('/api/contact', async (req, res) => {
-  console.log('Received contact request:', req.body);
+  console.log('Received contact request:', req.body); // Log the data sent by the client
   try {
     const { name, email, subject, message } = req.body;
 
+    // Save message to the database
     const newMessage = new Message({
       name,
       email,

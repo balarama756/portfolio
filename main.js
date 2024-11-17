@@ -84,8 +84,9 @@ document.getElementById('contact-form').addEventListener('submit', async functio
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
+            mode: 'cors', // Ensure CORS mode is enabled
         });
-
+        
         const result = await response.json();
 
         if (response.ok) {
