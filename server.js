@@ -4,10 +4,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 
-// Load environment variables
 dotenv.config();
 
-// Initialize Express app
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -15,7 +13,7 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 
 // Set the ngrok URL
-const ngrokUrl = 'https://fd2a-139-5-248-27.ngrok-free.app'; // Replace with your actual ngrok URL
+const ngrokUrl = 'https://fd2a-139-5-248-27.ngrok-free.app';  // Ensure you replace this with your actual ngrok URL
 
 // CORS setup
 app.use(cors({
@@ -23,9 +21,11 @@ app.use(cors({
     'http://localhost:8080', // Local development (if you're working on your local machine)
     'https://balarama756.github.io', // GitHub Pages URL
     ngrokUrl, // Ngrok URL (ensure you update this when your Ngrok URL changes)
+    '*', // Allow all origins temporarily for debugging (remove this later)
   ],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
+  credentials: true, // Allow cookies and credentials to be sent
 }));
 
 // Handle OPTIONS (Preflight) requests
@@ -34,6 +34,7 @@ app.options('*', cors({
     'http://localhost:8080', 
     'https://balarama756.github.io', 
     ngrokUrl,
+    '*', // Temporarily for debugging
   ],
 }));
 
