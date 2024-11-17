@@ -13,7 +13,7 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 
 // Set the ngrok URL
-const ngrokUrl = 'https://cd3-139-5-248-121.ngrok-free.app';  // Replace this with your actual ngrok URL
+const ngrokUrl = 'https://fd2a-139-5-248-27.ngrok-free.app';  // Replace this with your actual ngrok URL
 
 // Enable CORS for specific origins
 app.use(cors({
