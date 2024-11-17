@@ -14,19 +14,27 @@ const port = process.env.PORT || 5000;
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
 
-// Set the ngrok URL (use dynamic ngrok URL if running Ngrok)
+// Set the ngrok URL
 const ngrokUrl = 'https://fd2a-139-5-248-27.ngrok-free.app'; // Replace with your actual ngrok URL
 
-// Enable CORS for specific origins and handle preflight requests
+// CORS setup
 app.use(cors({
-  origin: ['http://localhost:8080', 'https://balarama756.github.io', ngrokUrl], // Add your actual domains and ngrok URL here
+  origin: [
+    'http://localhost:8080', // Local development (if you're working on your local machine)
+    'https://balarama756.github.io', // GitHub Pages URL
+    ngrokUrl, // Ngrok URL (ensure you update this when your Ngrok URL changes)
+  ],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
 }));
 
-// Preflight request handling globally (OPTIONS)
+// Handle OPTIONS (Preflight) requests
 app.options('*', cors({
-  origin: ['http://localhost:8080', 'https://balarama756.github.io', ngrokUrl],
+  origin: [
+    'http://localhost:8080', 
+    'https://balarama756.github.io', 
+    ngrokUrl,
+  ],
 }));
 
 // MongoDB connection
@@ -45,11 +53,9 @@ const Message = mongoose.model('Message', new mongoose.Schema({
 
 // Route to handle message submissions (POST)
 app.post('/api/contact', async (req, res) => {
-  console.log('Received contact request:', req.body); // Log the data sent by the client
   try {
     const { name, email, subject, message } = req.body;
 
-    // Save message to the database
     const newMessage = new Message({
       name,
       email,
@@ -60,29 +66,18 @@ app.post('/api/contact', async (req, res) => {
     await newMessage.save();
     res.status(200).json({ message: 'Your message has been sent successfully!' });
   } catch (err) {
-    console.error('Error while saving the message:', err);
     res.status(500).json({ message: 'Error sending message. Please try again.' });
   }
 });
 
 // Route to fetch all messages (GET)
 app.get('/api/messages', async (req, res) => {
-  console.log('Fetching all messages...');
   try {
     const messages = await Message.find().sort({ createdAt: -1 });
     res.status(200).json(messages);
   } catch (err) {
-    console.error('Error while fetching messages:', err);
     res.status(500).json({ message: 'Error fetching messages.' });
   }
-});
-
-// Log response headers for debugging
-app.use((req, res, next) => {
-  res.on('finish', () => {
-    console.log('Response Headers:', res.getHeaders());
-  });
-  next();
 });
 
 // Start the server
