@@ -13,7 +13,7 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 
 // Set the ngrok URL
-const ngrokUrl = 'https://fd2a-139-5-248-27.ngrok-free.app';  // Ensure you replace this with your actual ngrok URL
+const ngrokUrl = 'https://12a1-139-5-248-27.ngrok-free.app';  // Ensure you replace this with your actual ngrok URL
 
 // CORS setup
 app.use(cors({
@@ -39,9 +39,9 @@ app.options('*', cors({
 }));
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.log('Error connecting to MongoDB:', err));
+  .catch(err => console.error('Error connecting to MongoDB:', err));
 
 // Define the Message model
 const Message = mongoose.model('Message', new mongoose.Schema({

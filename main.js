@@ -78,7 +78,7 @@ document.getElementById('contact-form').addEventListener('submit', async functio
     const data = { name, email, subject, message };
 
     try {
-        const response = await fetch('https://fd2a-139-5-248-27.ngrok-free.app/api/contact', {
+        const response = await fetch( 'https://12a1-139-5-248-27.ngrok-free.app/api/contact', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
