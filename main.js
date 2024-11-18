@@ -1,5 +1,5 @@
 // Constants and Configurations
-const API_URL = 'https://your-backend-url.com/api/contact'; // Replace with your deployed backend URL
+const API_URL = 'https://portfolio-6-awit.onrender.com/api/contact'; // Replace with your deployed backend URL
 
 // Select DOM elements
 const menuIcon = document.querySelector('#menu-icon');
