@@ -1,122 +1,123 @@
+// Constants and Configurations
+const API_URL = 'https://your-backend-url.com/api/contact'; // Replace with your deployed backend URL
+
 // Select DOM elements
-let menuIcon = document.querySelector('#menu-icon');
-let navbar = document.querySelector('.navbar');
-let sections = document.querySelectorAll('section');
-let navLinks = document.querySelectorAll('header nav a');
+const menuIcon = document.querySelector('#menu-icon');
+const navbar = document.querySelector('.navbar');
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('header nav a');
 
-// Create success pop-up div
-let successMessage = document.createElement('div');
-successMessage.classList.add('success-message');
-document.body.appendChild(successMessage); // Append to body
+// Create reusable message pop-ups
+const successMessage = document.createElement('div');
+const errorMessage = document.createElement('div');
 
-// Create error pop-up div
-let errorMessage = document.createElement('div');
-errorMessage.classList.add('error-message');
-document.body.appendChild(errorMessage); // Append to body
+successMessage.classList.add('message', 'success-message');
+errorMessage.classList.add('message', 'error-message');
 
-// Menu Toggle
+document.body.appendChild(successMessage);
+document.body.appendChild(errorMessage);
+
+// Toggle Menu Icon and Navbar
 menuIcon.onclick = () => {
-    menuIcon.classList.toggle('fa-xmark');
-    navbar.classList.toggle('active');
+  menuIcon.classList.toggle('fa-xmark'); // CSS class for the "X" icon
+  navbar.classList.toggle('active');    // CSS class to show/hide the navbar
 };
 
-// Scroll section active link
+// Scroll Behavior and Active Link Highlight
 window.onscroll = () => {
-    sections.forEach(sec => {
-        let top = window.scrollY;
-        let offset = sec.offsetTop - 150;
-        let height = sec.offsetHeight;
-        let id = sec.getAttribute('id');
+  const top = window.scrollY;
 
-        if (top >= offset && top < offset + height) {
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                document.querySelector(`header nav a[href*="${id}"]`).classList.add('active');
+  // Highlight active section
+  sections.forEach((section) => {
+    const offset = section.offsetTop - 150;
+    const height = section.offsetHeight;
+    const id = section.getAttribute('id');
 
-            });
-        }
-    });
+    if (top >= offset && top < offset + height) {
+      navLinks.forEach((link) => link.classList.remove('active'));
+      const activeLink = document.querySelector(`header nav a[href*="${id}"]`);
+      if (activeLink) activeLink.classList.add('active'); // CSS class for the active link
+    }
+  });
 
-    // Sticky nav bar
-    let header = document.querySelector('header');
-    header.classList.toggle('sticky', window.scrollY > 100);
+  // Sticky Header
+  const header = document.querySelector('header');
+  header.classList.toggle('sticky', top > 100); // CSS class for the sticky header
 
-    // Remove toggle icon and navbar
-    menuIcon.classList.remove('fa-xmark');
-    navbar.classList.remove('active');
+  // Close Navbar on Scroll
+  menuIcon.classList.remove('fa-xmark');
+  navbar.classList.remove('active');
 };
 
-// Scroll reveal JS
+// Scroll Reveal Animations
 ScrollReveal({
-    distance: '80px',
-    duration: 2000,
-    delay: 200,
+  distance: '80px',
+  duration: 2000,
+  delay: 200,
 });
-ScrollReveal().reveal('.home-content, heading', { origin: 'top' });
+
+ScrollReveal().reveal('.home-content, .heading', { origin: 'top' });
 ScrollReveal().reveal('.home-img, .services-container, .portfolio-box, .contact form', { origin: 'bottom' });
 ScrollReveal().reveal('.home-contact h1, .about-img', { origin: 'left' });
 ScrollReveal().reveal('.home-contact p, .about-content', { origin: 'right' });
 
-// Typed JS
-const typed = new Typed('.multiple-text', {
-    strings: ['Full Stack Developer', 'Web Designer', 'Memer', 'Video Editor', 'Graphic Designer'],
-    typeSpeed: 70,
-    backSpeed: 70,
-    backDelay: 1000,
-    loop: true,
+// Typed.js Animations
+new Typed('.multiple-text', {
+  strings: ['Full Stack Developer', 'Web Designer', 'Memer', 'Video Editor', 'Graphic Designer'],
+  typeSpeed: 70,
+  backSpeed: 70,
+  backDelay: 1000,
+  loop: true,
 });
 
-// Contact Form Submission with Success and Error Pop-ups
-document.getElementById('contact-form').addEventListener('submit', async function (e) {
-    e.preventDefault(); // Prevent default form submission
+// Form Submission with Success and Error Messages
+document.getElementById('contact-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const subject = document.getElementById('subject').value;
-    const message = document.getElementById('message').value;
+  // Get form data
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const subject = document.getElementById('subject').value.trim();
+  const message = document.getElementById('message').value.trim();
 
-    const data = { name, email, subject, message };
+  // Validate form inputs
+  if (!name || !email || !subject || !message) {
+    showMessage('All fields are required.', 'error');
+    return;
+  }
 
-    try {
-        const response = await fetch( 'https://12a1-139-5-248-27.ngrok-free.app/api/contact', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-            mode: 'cors', // Ensure CORS mode is enabled
-        });
-        
-        const result = await response.json();
+  const data = { name, email, subject, message };
 
-        if (response.ok) {
-            // Show success message
-            successMessage.textContent = 'Message sent successfully!';
-            successMessage.style.display = 'block';
-            successMessage.classList.add('show'); // Add animation class for fade-in
-            setTimeout(() => {
-                successMessage.classList.remove('show'); // Remove fade-in animation
-                successMessage.style.display = 'none'; // Hide after animation
-            }, 3000);
-        } else {
-            // Show error message
-            errorMessage.textContent = 'There was an error sending your message.';
-            errorMessage.style.display = 'block';
-            errorMessage.classList.add('show'); // Add animation class for fade-in
-            setTimeout(() => {
-                errorMessage.classList.remove('show'); // Remove fade-in animation
-                errorMessage.style.display = 'none'; // Hide after animation
-            }, 3000);
-        }
-    } catch (error) {
-        // Show error pop-up in case of a fetch error
-        errorMessage.textContent = 'There was an error sending your message.';
-        errorMessage.style.display = 'block';
-        errorMessage.classList.add('show');
-        setTimeout(() => {
-            errorMessage.classList.remove('show');
-            errorMessage.style.display = 'none';
-        }, 3000);
-        console.error('Error:', error); // Log the error
+  try {
+    // Send data to backend
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      showMessage(result.message || 'Message sent successfully!', 'success');
+    } else {
+      showMessage(result.message || 'Failed to send message. Please try again.', 'error');
     }
+  } catch (error) {
+    console.error('Error:', error);
+    showMessage('An unexpected error occurred. Please try again.', 'error');
+  }
 });
+
+// Function to Display Success/Error Messages
+function showMessage(message, type) {
+  const messageBox = type === 'success' ? successMessage : errorMessage;
+  messageBox.textContent = message;
+  messageBox.style.display = 'block';
+  messageBox.classList.add('show'); // Add animation class
+
+  setTimeout(() => {
+    messageBox.classList.remove('show'); // Remove animation
+    messageBox.style.display = 'none'; // Hide after animation
+  }, 3000);
+}
