@@ -485,7 +485,7 @@ span{
     }
 }
 /* Styling for the success and error messages */
-.success-message, .error-message {
+/* .success-message, .error-message {
     position: fixed;
     bottom: 20px;
     left: 50%;
@@ -495,20 +495,80 @@ span{
     font-size: 16px;
     color: white;
     z-index: 1000;
-    display: none; /* Initially hidden */
+    display: none; 
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
 }
 
 .success-message {
-    background-color: #28a745; /* Green for success */
+    background-color: #28a745; 
 }
 
 .error-message {
-    background-color: #dc3545; /* Red for error */
+    background-color: #dc3545; 
 }
 
-/* Animation to show the pop-up */
 .success-message.show, .error-message.show {
     opacity: 1;
-}
+} */
+
+/* Message Pop-ups */
+.message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.5s, transform 0.5s;
+    transform: translateY(-20px);
+  }
+  
+  .message.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .success-message {
+    background-color: #4caf50; /* Green */
+  }
+  
+  .error-message {
+    background-color: #f44336; /* Red */
+  }
+  
+  /* Navbar and Menu */
+  .navbar {
+    display: none; /* Initially hidden */
+    flex-direction: column;
+  }
+  
+  .navbar.active {
+    display: flex; /* Show navbar on toggle */
+  }
+  
+  #menu-icon {
+    cursor: pointer;
+    font-size: 24px;
+  }
+  
+  /* Sticky Header */
+  header.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #333;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Active Link */
+  header nav a.active {
+    color: #4caf50; /* Highlight color */
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  

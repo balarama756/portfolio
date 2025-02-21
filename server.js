@@ -1,73 +1,83 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
-
-dotenv.config();
+const express = require("express");
+const nodemailer = require("nodemailer");
+const cors = require("cors");
+const path = require("path");
+require("dotenv").config(); // Secure credentials
 
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = 5000;
 
-// Middleware to parse JSON bodies
-app.use(bodyParser.json());
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
-// CORS setup
-app.use(cors({
-  origin: [
-    'http://localhost:8080', // Local development
-    'https://balarama756.github.io', // GitHub Pages
-    process.env.FRONTEND_URL, // Set in your environment variables for flexibility
-  ],
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
-  credentials: true,
-}));
+// Debug Middleware: Log Incoming Requests
+app.use((req, res, next) => {
+    console.log("📩 Raw Request Body:", req.body);
+    next();
+});
 
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('Error connecting to MongoDB:', err));
+// Serve Static Files
+app.use(express.static(path.join(__dirname)));
 
-// Define the Message model
-const Message = mongoose.model('Message', new mongoose.Schema({
-  name: String,
-  email: String,
-  subject: String,
-  message: String,
-  createdAt: { type: Date, default: Date.now },
-}));
+// Contact Form API Route
+app.post("/api/contact", async (req, res) => {
+    try {
+        console.log("📩 Full Request Body:", req.body); // ✅ Ensure all data is logged
 
-// Route to handle message submissions (POST)
-app.post('/api/contact', async (req, res) => {
-  try {
-    const { name, email, subject, message } = req.body;
+        const { name, email, phone, subject, message } = req.body;
 
-    if (!name || !email || !subject || !message) {
-      return res.status(400).json({ message: 'All fields are required.' });
+        // 🛑 Fix: Make sure the `subject` is included in logs and checks
+        if (!name || !email || !phone || !subject || !message) {
+            console.error("❌ Missing Fields:", { name, email, phone, subject, message });
+            return res.status(400).json({ error: "All fields are required" });
+        }
+
+        console.log("✅ Data Received Successfully:", { name, email, phone, subject, message });
+
+        // Configure Nodemailer
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL_USER, // Use environment variables
+                pass: process.env.EMAIL_PASS,
+            },
+        });
+
+        // Define Email Options
+        const mailOptions = {
+            from: `"${name}" <${email}>`,
+            to: "balaramak86@gmail.com",
+            subject: `New Contact Form - ${subject}`, // ✅ Fixed: Ensure subject is passed
+            text: `You have a new message:\n\n
+                📌 Name: ${name}\n
+                📧 Email: ${email}\n
+                📱 Phone: ${phone}\n
+                📝 Subject: ${subject}\n
+                💬 Message: ${message}\n\n
+                🔔 Please respond soon.`,
+        };
+
+        // Send Email
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.error("❌ Email Error:", err);
+                return res.status(500).json({ message: "Error sending message." });
+            }
+            console.log("✅ Email Sent Successfully:", info.response);
+            res.status(200).json({ message: "Message sent successfully!" });
+        });
+
+    } catch (error) {
+        console.error("❌ Server Error:", error);
+        res.status(500).json({ message: "Server error occurred." });
     }
-
-    const newMessage = new Message({ name, email, subject, message });
-    await newMessage.save();
-    res.status(200).json({ message: 'Your message has been sent successfully!' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error sending message. Please try again.' });
-  }
 });
 
-// Route to fetch all messages (GET)
-app.get('/api/messages', async (req, res) => {
-  try {
-    const messages = await Message.find().sort({ createdAt: -1 });
-    res.status(200).json(messages);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error fetching messages.' });
-  }
-});
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+// Start Server
+app.listen(PORT, async () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    const open = (await import("open")).default;
+    open(`http://localhost:${PORT}/index.html`);
 });
