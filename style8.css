@@ -183,45 +183,81 @@ span{
     margin: 2rem 0 3rem; 
 }
 
-.services h2{
+.services {
+    background: var(--bg-color);
+    min-height: auto;
+    padding-bottom: 7rem;
+}
+
+.services h2 {
     margin-bottom: 5rem;
 }
 
-.services-container{
-    display: flex;
-    justify-content: center;
+.services-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 2rem;
 }
 
-.services-container .services-box{
-    flex: 1 1 30rem;
-    background: var(--snd-bg-color);
+.services-box {
+    position: relative;
     padding: 3rem 2rem 4rem;
     border-radius: 2rem;
+    box-shadow: 0 0 1rem var(--bg-color);
     text-align: center;
-    border: .2rem solid var(--bg-color);
+    border: .2rem solid transparent;
+    transition: .5s ease;
+    z-index: 1;
+    overflow: hidden;
+    background: var(--snd-bg-color);
+}
+
+.services-box::before {
+    content: none;
+}
+
+.services-box::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: .2rem solid var(--main-color);
+    border-radius: 2rem;
+    opacity: 0;
     transition: .5s ease;
 }
 
-.services-container .services-box:hover{
-    border-color: var(--main-color);
-    transform: scale(1.02);
- }
+.services-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 2rem var(--main-color);
+}
 
-.services-box i{
+.services-box:hover::after {
+    opacity: 1;
+}
+
+.services-box:hover i {
+    color: var(--main-color);
+    transform: translateY(-5px);
+}
+
+.services-box i {
     font-size: 7rem;
     color: var(--main-color);
- }
+    margin-bottom: 2rem;
+    transition: .5s ease;
+}
 
 .services-box h3 {
     font-size: 2.6rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
 }
 
 .services-box p {
     font-size: 1.6rem;
     margin: 1rem 0 3rem;
+    color: var(--text-color);
 }
 
 .portfolio{
@@ -402,6 +438,9 @@ span{
     .footer{
         padding: 2rem 3%;
     }
+    .services-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px){
@@ -460,6 +499,12 @@ span{
     .portfolio-container{
         grid-template-columns: repeat(2, 1fr);
     }
+    .services-container {
+        grid-template-columns: 1fr;
+    }
+    .services-box {
+        padding: 2rem;
+    }
 }
 
 @media (max-width: 617px){
@@ -482,6 +527,9 @@ span{
     }
     .contact form .input-box input{
         width: 100%;
+    }
+    .services h2 {
+        margin-bottom: 3rem;
     }
 }
 /* Styling for the success and error messages */
