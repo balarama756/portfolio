@@ -2,15 +2,37 @@ const express = require("express");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
 const path = require("path");
+const multer = require("multer");
 require("dotenv").config(); // Secure credentials
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
+
+// Multer configuration for file upload
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ['.pdf', '.doc', '.docx'];
+        const ext = path.extname(file.originalname).toLowerCase();
+        if (allowedTypes.includes(ext)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Invalid file type. Only PDF and DOC files are allowed.'));
+        }
+    }
+});
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: "*" }));
+app.use(cors({
+    origin: "http://localhost:5000",
+    credentials: true
+}));
 
 // Debug Middleware: Log Incoming Requests
 app.use((req, res, next) => {
@@ -21,57 +43,85 @@ app.use((req, res, next) => {
 // Serve Static Files
 app.use(express.static(path.join(__dirname)));
 
-// Contact Form API Route
-app.post("/api/contact", async (req, res) => {
-    try {
-        console.log("📩 Full Request Body:", req.body); // ✅ Ensure all data is logged
+// Create transporter
+const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    },
+    debug: true // Enable debug logs
+});
 
+// Verify transporter
+transporter.verify((error, success) => {
+    if (error) {
+        console.error("SMTP Verification Error:", error);
+    } else {
+        console.log("Server is ready to send emails");
+    }
+});
+
+// Contact Form API Route with file upload
+app.post("/api/contact", upload.single('resume'), async (req, res) => {
+    try {
         const { name, email, phone, subject, message } = req.body;
 
-        // 🛑 Fix: Make sure the `subject` is included in logs and checks
         if (!name || !email || !phone || !subject || !message) {
-            console.error("❌ Missing Fields:", { name, email, phone, subject, message });
-            return res.status(400).json({ error: "All fields are required" });
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required"
+            });
         }
 
-        console.log("✅ Data Received Successfully:", { name, email, phone, subject, message });
-
-        // Configure Nodemailer
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                user: process.env.EMAIL_USER, // Use environment variables
-                pass: process.env.EMAIL_PASS,
-            },
-        });
-
-        // Define Email Options
+        // Enhanced email template
         const mailOptions = {
-            from: `"${name}" <${email}>`,
-            to: "balaramak86@gmail.com",
-            subject: `New Contact Form - ${subject}`, // ✅ Fixed: Ensure subject is passed
-            text: `You have a new message:\n\n
-                📌 Name: ${name}\n
-                📧 Email: ${email}\n
-                📱 Phone: ${phone}\n
-                📝 Subject: ${subject}\n
-                💬 Message: ${message}\n\n
-                🔔 Please respond soon.`,
+            from: process.env.EMAIL_USER,
+            to: process.env.EMAIL_USER,
+            replyTo: email,
+            subject: `Portfolio Contact: ${subject}`,
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 5px;">
+                    <h2 style="color: #5982F4; border-bottom: 2px solid #5982F4; padding-bottom: 10px;">New Portfolio Contact</h2>
+                    
+                    <div style="margin: 20px 0;">
+                        <h3 style="color: #333;">Contact Details:</h3>
+                        <p><strong>Name:</strong> ${name}</p>
+                        <p><strong>Email:</strong> ${email}</p>
+                        <p><strong>Phone:</strong> ${phone}</p>
+                        <p><strong>Subject:</strong> ${subject}</p>
+                    </div>
+
+                    <div style="margin: 20px 0; padding: 15px; background-color: #f9f9f9; border-radius: 5px;">
+                        <h3 style="color: #333;">Message:</h3>
+                        <p style="line-height: 1.6;">${message}</p>
+                    </div>
+                </div>
+            `,
+            attachments: req.file ? [
+                {
+                    filename: req.file.originalname,
+                    content: req.file.buffer
+                }
+            ] : []
         };
 
-        // Send Email
-        transporter.sendMail(mailOptions, (err, info) => {
-            if (err) {
-                console.error("❌ Email Error:", err);
-                return res.status(500).json({ message: "Error sending message." });
-            }
-            console.log("✅ Email Sent Successfully:", info.response);
-            res.status(200).json({ message: "Message sent successfully!" });
+        await transporter.sendMail(mailOptions);
+
+        res.status(200).json({
+            success: true,
+            message: "Message sent successfully!"
         });
 
     } catch (error) {
-        console.error("❌ Server Error:", error);
-        res.status(500).json({ message: "Server error occurred." });
+        console.error("Server Error:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to send message",
+            error: error.message
+        });
     }
 });
 
