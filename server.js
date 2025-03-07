@@ -26,22 +26,24 @@ const upload = multer({
     }
 });
 
+// Updated CORS configuration
+app.use(cors({
+    origin: '*', // Allow all origins
+    methods: ['GET', 'POST', 'OPTIONS'], // Allow these methods
+    allowedHeaders: ['Content-Type', 'Origin', 'Accept'], // Allow these headers
+    credentials: true
+}));
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-    origin: "http://localhost:5000",
-    credentials: true
-}));
+app.use(express.static(path.join(__dirname)));
 
 // Debug Middleware: Log Incoming Requests
 app.use((req, res, next) => {
     console.log("📩 Raw Request Body:", req.body);
     next();
 });
-
-// Serve Static Files
-app.use(express.static(path.join(__dirname)));
 
 // Create transporter
 const transporter = nodemailer.createTransport({
@@ -67,6 +69,8 @@ transporter.verify((error, success) => {
 // Contact Form API Route with file upload
 app.post("/api/contact", upload.single('resume'), async (req, res) => {
     try {
+        console.log('Received contact form submission:', req.body);
+
         const { name, email, phone, subject, message } = req.body;
 
         if (!name || !email || !phone || !subject || !message) {
@@ -126,8 +130,11 @@ app.post("/api/contact", upload.single('resume'), async (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, async () => {
+app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
-    const open = (await import("open")).default;
-    open(`http://localhost:${PORT}/index.html`);
+});
+
+// Error handling
+process.on('unhandledRejection', (error) => {
+    console.error('Unhandled Rejection:', error);
 });

@@ -44,7 +44,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const response = await fetch("https://portfolio-6-awit.onrender.com/api/contact", {
                 method: "POST",
-                body: formData
+                body: formData,
+                mode: 'cors',
+                credentials: 'same-origin'
             });
 
             const result = await response.json();
@@ -55,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 fileName.textContent = "";
                 removeFileBtn.style.display = "none";
             } else {
-                alert(result.message || "Failed to send message.");
+                throw new Error(result.message || "Failed to send message");
             }
         } catch (error) {
             console.error("Error:", error);
