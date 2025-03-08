@@ -1,13 +1,34 @@
-
-
-// Toggle menu icon and navbar
+// Toggle menu icon and navbar with overlay
 let menuIcon = document.querySelector("#menu-icon");
 let navbar = document.querySelector(".navbar");
+let overlay = document.createElement("div");
+overlay.classList.add("overlay");
+document.body.appendChild(overlay);
 
 menuIcon.onclick = () => {
-    menuIcon.classList.toggle("fa-xmark");
+    menuIcon.classList.toggle("active");
     navbar.classList.toggle("active");
+    overlay.classList.toggle("active");
+    document.body.style.overflow = navbar.classList.contains("active") ? "hidden" : "auto";
 };
+
+// Close menu when clicking overlay
+overlay.onclick = () => {
+    menuIcon.classList.remove("active");
+    navbar.classList.remove("active");
+    overlay.classList.remove("active");
+    document.body.style.overflow = "auto";
+};
+
+// Close menu when clicking navigation links
+document.querySelectorAll(".navbar a").forEach(link => {
+    link.onclick = () => {
+        menuIcon.classList.remove("active");
+        navbar.classList.remove("active");
+        overlay.classList.remove("active");
+        document.body.style.overflow = "auto";
+    };
+});
 
 // Scroll sections active link
 let sections = document.querySelectorAll("section");
@@ -33,7 +54,7 @@ window.onscroll = () => {
     header.classList.toggle("sticky", window.scrollY > 100);
 
     // Remove menu when clicking on navbar link
-    menuIcon.classList.remove("fa-xmark");
+    menuIcon.classList.remove("active");
     navbar.classList.remove("active");
 };
 

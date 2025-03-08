@@ -65,6 +65,7 @@ section{
     color:var(--text-color);
     display: none;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 .home{
@@ -454,27 +455,39 @@ span{
 @media (max-width: 768px){
     #menu-icon {
         display: block;
-        font-size: 3rem;
     }
     .navbar {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        padding: 1rem 3%;
-        background: var(--bg-color);
-        border-top: .1rem solid rgba(0, 0, 0, .2);
-        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .2);
-        display: none;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 60%;
+        height: 100vh;
+        background: var(--snd-bg-color);
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        transition: 0.5s ease;
+        box-shadow: -5px 0 10px rgba(0, 0, 0, 0.1);
     }
     .navbar.active {
-        display: block;
+        right: 0;
     }
     .navbar a {
         display: block;
         font-size: 2rem;
-        margin: 3rem 0;
-        text-align: center;
+        margin: 2rem 0;
+        padding: 1rem 2rem;
+        width: 100%;
+        border-radius: 0.5rem;
+        transition: 0.3s;
+    }
+    .navbar a:hover,
+    .navbar a.active {
+        background: var(--main-color);
+        color: var(--bg-color);
+        padding-left: 3rem;
     }
     .home{
         flex-direction: column;
@@ -542,6 +555,22 @@ span{
     .contact {
         padding: 5rem 5% 2rem;
     }
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        z-index: 99;
+    }
+    .overlay.active {
+        display: block;
+    }
+    #menu-icon.active {
+        transform: rotate(90deg);
+    }
 }
 
 @media (max-width: 617px){
@@ -602,6 +631,9 @@ span{
     .contact form .input-box input,
     .contact form textarea {
         margin: 0.5rem 0;
+    }
+    .navbar {
+        width: 80%;
     }
 }
 
