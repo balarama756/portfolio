@@ -343,42 +343,68 @@ span{
     margin-bottom: 3rem;
 }
 
-.contact form{
+.contact form {
     max-width: 70rem;
     margin: 1rem auto;
     text-align: center;
     margin-bottom: 3rem;
 }
 
-.contact form .input-box{
+.contact form .input-box {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 1.5rem;
 }
 
 .contact form .input-box input,
-.contact form textarea{
-    width:100%;
+.contact form textarea {
+    width: 100%;
     padding: 1.5rem;
     font-size: 1.6rem;
-    color:var(--text-color);
+    color: var(--text-color);
     background: var(--snd-bg-color);
     border-radius: .8rem;
     margin: .7rem 0;
 }
 
-.contact form .input-box input{
+.contact form .input-box input {
     width: 49%;
 }
 
 .contact form textarea {
-    resize: none;
+    resize: both;
+    min-height: 100px;
+    max-height: 500px;
 }
 
-.contact form .btn{
+.contact form .btn {
+    display: inline-block;
+    padding: 1rem 2.8rem;
+    background: var(--main-color);
+    border-radius: .6rem;
+    box-shadow: 0 0 1rem var(--main-color);
+    font-size: 1.6rem;
+    color: var(--snd-bg-color);
+    letter-spacing: .1rem;
+    font-weight: 600;
+    transition: .5s ease;
     margin-top: 2rem;
-    cursor:pointer;
+    cursor: pointer;
+}
+
+.contact form .btn:hover {
+    box-shadow: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .contact form .input-box {
+        flex-direction: column;
+    }
+
+    .contact form .input-box input {
+        width: 100%;
+    }
 }
 
 .footer{
@@ -536,8 +562,10 @@ span{
     .contact form .input-box {
         flex-direction: column;
     }
-    .contact form .input-box input {
+    .contact form .input-box input,
+    .contact form textarea {
         width: 100%;
+        min-width: 150px;
     }
     .file-label {
         font-size: 1.4rem;
@@ -865,5 +893,114 @@ span{
         max-width: 100%;
         height: auto;
     }
+}
+
+/* Zoom Controls */
+.zoom-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.zoom-btn {
+    background: var(--main-color);
+    color: var(--bg-color);
+    border: none;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    transition: .3s;
+}
+
+.zoom-btn:hover {
+    background: var(--text-color);
+    transform: scale(1.1);
+}
+
+/* Add zoom transition to form */
+#contact-form {
+    transition: transform 0.3s ease;
+    transform-origin: top center;
+}
+
+/* Zoom levels */
+#contact-form.zoom-75 {
+    transform: scale(0.75);
+}
+
+#contact-form.zoom-85 {
+    transform: scale(0.85);
+}
+
+#contact-form.zoom-100 {
+    transform: scale(1);
+}
+
+#contact-form.zoom-115 {
+    transform: scale(1.15);
+}
+
+#contact-form.zoom-125 {
+    transform: scale(1.25);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .zoom-btn {
+        width: 3.5rem;
+        height: 3.5rem;
+        font-size: 1.4rem;
+    }
+}
+
+/* Add these styles for form controls */
+.form-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.zoom-btn {
+    background: var(--main-color);
+    color: var(--bg-color);
+    border: none;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    transition: .3s;
+}
+
+.zoom-btn:hover {
+    background: var(--text-color);
+    transform: scale(1.1);
+}
+
+.form-container {
+    position: relative;
+    overflow: auto;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+#contact-form {
+    transition: transform 0.3s ease;
+    transform-origin: center;
+    cursor: grab;
+}
+
+#contact-form:active {
+    cursor: grabbing;
 }
   

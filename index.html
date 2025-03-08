@@ -124,7 +124,10 @@
                 <div class="portfolio-layer">
                     <h2>VERBALLINK TRANSLATOR: INTERACTIVE MULTILINGUAL CONVERSATION COMPANION</h2>
                     <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-                    <i class="fa-solid fa-up-right-from-square"></i>
+                    <a href="https://verballink.onrender.com">
+                      <i class="fa-solid fa-up-right-from-square"></i>
+                    </a>
+                    
                  </div>
             </div>
 
@@ -169,35 +172,52 @@
     <!--CONTACT SECTION DESIGN  -->
     <section class="contact" id="contact">
         <h2 class="heading">Contact<span>Me</span></h2>
-    
-        <form id="contact-form" enctype="multipart/form-data">
-            <div class="input-box">
-                <input type="text" id="name" placeholder="Full Name" required>
-                <input type="email" id="email" placeholder="Email Address" required>
-            </div>
-    
-            <div class="input-box">
-                <input type="number" id="mobile" placeholder="Mobile Number" required>
-                <input type="text" id="subject" placeholder="Email Subject" required>
-            </div>
 
-            <!-- Update the file input section in the contact form -->
-            <div class="input-box file-input">
-                <input type="file" id="resume" accept=".pdf,.doc,.docx" class="custom-file-input">
-                <label for="resume" class="file-label">
-                    <i class="fas fa-upload"></i> Upload Resume (PDF/DOC)
-                </label>
-                <div class="file-info">
-                    <span id="file-name" class="file-name"></span>
-                    <button type="button" id="remove-file" class="remove-file" style="display: none;">
-                        <i class="fas fa-times"></i>
-                    </button>
+        <!-- Add zoom and pan controls -->
+        <div class="form-controls">
+            <div class="zoom-controls">
+                <button class="zoom-btn" id="zoom-out">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button class="zoom-btn" id="zoom-reset">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button class="zoom-btn" id="zoom-in">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-container" id="form-container">
+            <form id="contact-form" enctype="multipart/form-data">
+                <div class="input-box">
+                    <input type="text" id="name" placeholder="Full Name" required>
+                    <input type="email" id="email" placeholder="Email Address" required>
                 </div>
-            </div>
+        
+                <div class="input-box">
+                    <input type="number" id="mobile" placeholder="Mobile Number" required>
+                    <input type="text" id="subject" placeholder="Email Subject" required>
+                </div>
 
-            <textarea id="message" cols="30" rows="10" placeholder="Your Message" required></textarea>
-            <input type="submit" value="Send Message" class="btn">
-        </form>
+                <!-- Update the file input section in the contact form -->
+                <div class="input-box file-input">
+                    <input type="file" id="resume" accept=".pdf,.doc,.docx" class="custom-file-input">
+                    <label for="resume" class="file-label">
+                        <i class="fas fa-upload"></i> Upload Resume (PDF/DOC)
+                    </label>
+                    <div class="file-info">
+                        <span id="file-name" class="file-name"></span>
+                        <button type="button" id="remove-file" class="remove-file" style="display: none;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <textarea id="message" cols="30" rows="10" placeholder="Your Message" required></textarea>
+                <input type="submit" value="Send Message" class="btn">
+            </form>
+        </div>
     </section>
     
 
