@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
             submitBtn.value = "Sending...";
             submitBtn.disabled = true;
 
-            const response = await fetch("https://portfolio-6-awit.onrender.com/api/contact", {
+            const response = await fetch("https://portfolio-y234.onrender.com/api/contact", {
                 method: "POST",
                 body: formData,
                 mode: 'cors',
