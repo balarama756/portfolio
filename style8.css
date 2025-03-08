@@ -353,6 +353,7 @@ span{
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    gap: 1.5rem;
 }
 
 .contact form .input-box input,
@@ -424,7 +425,13 @@ span{
         padding: 2rem 3%;
     }
     section{
-        padding:10rem 3%;
+        padding:10rem 3% 2rem;
+    }
+    .home{
+        padding: 0 3%;
+    }
+    .footer{
+        padding: 2rem 3%;
     }
     .services{
         padding: 7rem;
@@ -435,10 +442,11 @@ span{
     .contact{
         min-height: auto;
     }
-    .footer{
-        padding: 2rem 3%;
-    }
     .services-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+    .portfolio-container {
         grid-template-columns: repeat(2, 1fr);
     }
 }
@@ -446,6 +454,7 @@ span{
 @media (max-width: 768px){
     #menu-icon {
         display: block;
+        font-size: 3rem;
     }
     .navbar {
         position: absolute;
@@ -469,25 +478,30 @@ span{
     }
     .home{
         flex-direction: column;
+        padding-top: 8rem;
     }
-    .home-content h3{
+    .home-content {
+        text-align: center;
+    }
+    .home-content h3 {
         font-size: 2.6rem;
     }
-    .home-content h1{
+    .home-content h1 {
         font-size: 5rem;
-    }
-    .home-content{
-        order: 2;
     }
     .home-img img{
         width:70vw;
         margin-top: 4rem;
     }
     .about{
-        flex-direction: column;
+        flex-direction: column-reverse;
+        text-align: center;
+    }
+    .about-content h2 {
+        text-align: center;
     }
     .about-img img{
-        width: 90vw;
+        width: 70vw;
         margin-top: 4rem;
     }
     .services h2{
@@ -497,13 +511,36 @@ span{
         margin-bottom: 3rem;
     }
     .portfolio-container{
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
+        padding: 0 3%;
+    }
+    .portfolio-box {
+        margin-bottom: 2rem;
+    }
+    .portfolio-layer h4 {
+        font-size: 2rem;
+    }
+    .contact form .input-box {
+        flex-direction: column;
+    }
+    .contact form .input-box input {
+        width: 100%;
+    }
+    .file-label {
+        font-size: 1.4rem;
+        padding: 1.2rem;
+    }
+    .contact h2 {
+        font-size: 3rem;
     }
     .services-container {
         grid-template-columns: 1fr;
     }
     .services-box {
-        padding: 2rem;
+        padding: 2.5rem;
+    }
+    .contact {
+        padding: 5rem 5% 2rem;
     }
 }
 
@@ -525,13 +562,49 @@ span{
     html{
         font-size: 50%;
     }
-    .contact form .input-box input{
-        width: 100%;
+    .header {
+        padding: 1.5rem 5%;
     }
-    .services h2 {
-        margin-bottom: 3rem;
+    .home-content h1 {
+        font-size: 4rem;
+    }
+    .home-img img {
+        width: 90vw;
+    }
+    .about-img img {
+        width: 90vw;
+    }
+    .services-box {
+        padding: 2rem;
+    }
+    .services h2,
+    .portfolio h2,
+    .contact h2 {
+        font-size: 2.5rem;
+    }
+    .portfolio-layer h4 {
+        font-size: 1.8rem;
+    }
+    .portfolio-layer p {
+        font-size: 1.4rem;
+    }
+    .contact {
+        padding: 3rem 5% 2rem;
+    }
+    .contact form .input-box {
+        gap: 1rem;
+    }
+    .btn {
+        width: 100%;
+        margin-top: 2rem;
+        padding: 1rem 2.8rem;
+    }
+    .contact form .input-box input,
+    .contact form textarea {
+        margin: 0.5rem 0;
     }
 }
+
 /* Styling for the success and error messages */
 /* .success-message, .error-message {
     position: fixed;
@@ -680,5 +753,85 @@ span{
 .file-label:hover {
     background: var(--text-color);
     color: var(--main-color);
+}
+
+/* Add smooth transitions */
+.contact form .input-box input,
+.contact form textarea,
+.file-label,
+.btn {
+    transition: all 0.3s ease;
+}
+
+/* Add active/focus states for better mobile interaction */
+.contact form .input-box input:focus,
+.contact form textarea:focus {
+    border: 2px solid var(--main-color);
+    box-shadow: 0 0 10px rgba(89, 130, 244, 0.2);
+}
+
+/* Add touch feedback */
+.btn:active,
+.file-label:active,
+.remove-file:active {
+    transform: scale(0.98);
+}
+
+/* Enhanced touch interactions */
+@media (hover: none) {
+    .btn:active,
+    .services-box:active,
+    .portfolio-box:active,
+    .social-media a:active {
+        transform: scale(0.98);
+    }
+
+    .navbar a:active {
+        color: var(--main-color);
+    }
+}
+
+/* Smooth animations for all devices */
+.navbar a,
+.btn,
+.social-media a,
+.services-box,
+.portfolio-box,
+.portfolio-layer {
+    transition: all 0.3s ease;
+}
+
+/* Improved accessibility */
+.btn,
+.navbar a,
+.social-media a,
+.portfolio-layer a {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Better text readability on mobile */
+@media (max-width: 768px) {
+    p, .services-box p, .portfolio-layer p {
+        font-size: 1.6rem;
+        line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 {
+        line-height: 1.3;
+    }
+}
+
+/* Optimize images for mobile */
+@media (max-width: 768px) {
+    .home-img img,
+    .about-img img,
+    .portfolio-box img {
+        max-width: 100%;
+        height: auto;
+    }
 }
   
